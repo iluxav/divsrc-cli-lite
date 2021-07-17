@@ -8,7 +8,7 @@
 
 # production
 /build
-
+.npmrc
 # misc
 .DS_Store
 .env.local
