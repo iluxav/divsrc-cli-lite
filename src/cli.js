@@ -1,6 +1,6 @@
 import arg from 'arg'
 import {start} from './fakeServer'
-import {info, push, map} from './deployer'
+import {info, push, map, install} from './deployer'
 export function argsToOptions(rawArgs) {
   const args = arg({
     '--deploy': String,
@@ -56,6 +56,13 @@ export function cli(args) {
   if (command[0] === 'map') {
     try {
       map(options)
+    } catch (ex) {
+      console.log(ex.message)
+    }
+  }
+  if (command[0] === 'install') {
+    try {
+      install(options)
     } catch (ex) {
       console.log(ex.message)
     }

@@ -2,6 +2,7 @@ const fs = require('fs');
 const FormData = require('form-data');
 const axios = require('axios');
 
+
 const domain = process.env.DIVSRC_DOMAIN || 'https://api.divsrc.io';
 
 function generateSessionId() {
@@ -51,6 +52,17 @@ function getInstallations(pub_key) {
   }).then((res) => (res ? res.data : [])).catch((e) => console.log('ERROR', e.message));
 }
 
+function install(artifact_id, zone, version, base_url, secret) {
+  return axios({
+    method: 'post',
+    url: `${domain}/v1/installation/cli/${artifact_id}`,
+    data: {zone, version, base_url},
+    headers: {
+      'sdk-key': secret
+    },
+  }).then((res) => (res ? res.data : [])).catch((e) => console.log('ERROR', e.message));
+}
+
 
 function getDeploymentInfo(params, session, _secret) {
   return axios({
@@ -65,6 +77,16 @@ function getDeploymentInfo(params, session, _secret) {
 }
 
 module.exports = {
+  install: function ({version, artifact_id, secret, url}) {
+    const _secret = getSecret({secret})
+    if (version && artifact_id && secret && url) {
+      install(artifact_id, artifact_id, version, url, _secret).then(res => {
+        if (res) {
+          console.log(JSON.stringify(res, null, 2))
+        }
+      })
+    }
+  },
   map: function ({public}) {
     if (public) {
       getInstallations(public).then(res => {
