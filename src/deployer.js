@@ -8,6 +8,10 @@ function generateSessionId() {
   return [...Array(48)].map((i) => (~~(Math.random() * 36)).toString(36)).join('');
 }
 
+function getSecret(options) {
+  return options.secret || process.env.DIVSRC_SECRET
+}
+
 
 function deployArtifact(artifactInfo, files, session, _secret) {
   const form = new FormData();
@@ -92,7 +96,7 @@ module.exports = {
     if (version && artifact_id && secret) {
       const _secret = getSecret({secret})
       getDeploymentInfo([{version, artifact_id}], generateSessionId(), _secret).then(res => {
-        if (res && res[0]) {
+        if (res && res) {
           console.log(JSON.stringify(res[0], null, 2))
         }
       })
