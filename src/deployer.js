@@ -79,7 +79,7 @@ function getDeploymentInfo(params, session, _secret) {
 module.exports = {
   install: function ({version, artifact_id, secret, url}) {
     const _secret = getSecret({secret})
-    if (version && artifact_id && secret && url) {
+    if (version && artifact_id && _secret && url) {
       install(artifact_id, artifact_id, version, url, _secret).then(res => {
         if (res) {
           console.log(JSON.stringify(res, null, 2))
@@ -99,8 +99,8 @@ module.exports = {
     }
   },
   push: function ({version, artifact_id, secret, url, mainFileName}) {
-    const _secret = getSecret({secret})
-    if (version && artifact_id && secret && url && mainFileName) {
+    const _secret = getSecret({secret});
+    if (version && artifact_id && _secret && url && mainFileName) {
       deployArtifact({
         version,
         artifact_id,
@@ -115,8 +115,8 @@ module.exports = {
     }
   },
   info: function ({version, artifact_id, secret}) {
-    if (version && artifact_id && secret) {
-      const _secret = getSecret({secret})
+    const _secret = getSecret({secret});
+    if (version && artifact_id && _secret) {
       getDeploymentInfo([{version, artifact_id}], generateSessionId(), _secret).then(res => {
         if (res && res) {
           console.log(JSON.stringify(res[0], null, 2))
